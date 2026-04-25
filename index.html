@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="manifest" href="manifest.json" />
+	<title>プラカード</title>
+	<style>
+		body {
+			margin: 0px;
+			background-color: black;
+			overflow: hidden;
+		}
+		#main {
+			position: absolute;
+			top: 0;
+			left: 0;
+			font-family: sans-serif;
+			font-weight: 600;
+			font-size: 100lvh;
+			line-height: 100lvh;
+			letter-spacing: -0.1em;
+			margin: 0px;
+			width: max-content;
+			color: yellow;
+			animation: 10s linear 0s infinite both slide-in;
+		}
+		@keyframes slide-in {
+			from {
+				transform: translateX(0);
+			}
+			to {
+				transform: translateX(-50%);
+			}
+		}
+		#settingsButton {
+			position: absolute;
+			top: 5%;
+			left: 5%;
+			font-size: 1rem;
+			opacity: 50%;
+		}
+	</style>
+</head>
+<body>
+	<div id="main" class="animated">
+		ここにテキストを入力。ここにテキストを入力。
+	</div>
+	<button id="settingsButton" onclick="settings.showModal()">設定</button>
+	<dialog id="settings">
+		<div>
+			<label>一周する時間(秒)</label>
+			<input id="duration" type="number" placeholder="時間(秒)" value="10">
+		</div>
+
+		<div>
+			<label>背景の色</label>
+			<input id="bgcolor" type="color">
+		</div>
+
+		<div>
+			<label>文字の色</label>
+			<input id="color" type="color">
+		</div>
+
+		<div>
+			<label>表示するテキスト</label>
+			<input id="text" type="text" placeholder="テキスト" value="ここにテキストを入力。">
+		</div>
+		
+		<div>
+			<button onclick="settings.close()">OK</button>
+		</div>
+	</dialog>
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker
+				.register('sw.js')
+				.then(function() { console.log("Service Worker Registered"); })
+				.catch(function() { console.log("Service Worker Not Registered"); });
+		}
+
+		duration.addEventListener("change", (e) => {
+			main.style.animationDuration = e.currentTarget.value + "s";
+			console.log(e.currentTarget.value);
+		})
+		bgcolor.addEventListener("change", (e) => {
+			document.body.style.backgroundColor = e.currentTarget.value;
+			console.log(e.currentTarget.value);
+		})
+		color.addEventListener("change", (e) => {
+			main.style.color = e.currentTarget.value;
+			console.log(e.currentTarget.value);
+		})
+		text.addEventListener("input", (e) => {
+			main.textContent = e.currentTarget.value + e.currentTarget.value;
+			main.style.animationDuration = "0s";
+			window.requestAnimationFrame((time1) => {
+				window.requestAnimationFrame((time2) => {
+					main.style.animationDuration = duration.value + "s";
+				});
+			});
+			console.log(e.currentTarget.value);
+		})
+	</script>
+</body>
+</html>
