@@ -33,12 +33,42 @@
 				transform: translateX(-50%);
 			}
 		}
+		button {
+			border: none;
+			border-radius: 2em;
+			padding: 0.5em 1.5em;
+			font-family: sans-serif;
+			background-color: #fffa;
+			font-size: 0.8rem;
+			line-height: 0.8rem;
+		}
+		input[type="text"], input[type="number"], textarea {
+			background-color: #fffa;
+			border: none;
+			border-radius: 1em;
+			padding: 0.5em 1em;
+		}
+		#settings {
+			background-color: #ffffff88;
+			backdrop-filter: blur(8px) saturate(150%);
+			border: none;
+			border-radius: 1em;
+			box-shadow: 0px 4px 8px #0004;
+			font-family: sans-serif;
+		}
 		#settingsButton {
 			position: absolute;
 			top: 5%;
 			left: 5%;
 			font-size: 1rem;
 			opacity: 50%;
+		}
+		#form {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			column-gap: 0.5em;
+			row-gap: 0.5em;
+			margin: 1em auto;
 		}
 	</style>
 </head>
@@ -53,24 +83,24 @@
 			<br>
 			ブラウザの共有メニューから「ホーム画面に追加」をすると全画面表示、オフライン使用ができるようになります。
 		</div>
-		<div>
-			<label>一周する時間(秒)</label>
+
+		<div id="form">
+			<label for="duration">一周する時間(秒)</label>
 			<input id="duration" type="number" placeholder="時間(秒)" value="10">
-		</div>
-
-		<div>
-			<label>背景の色</label>
+			<label for="bgcolor">背景の色</label>
 			<input id="bgcolor" type="color">
-		</div>
-
-		<div>
-			<label>文字の色</label>
+			<label for="color">文字の色</label>
 			<input id="color" type="color">
-		</div>
-
-		<div>
-			<label>表示するテキスト</label>
+			<label for="text">表示するテキスト</label>
 			<input id="text" type="text" placeholder="テキスト" value="ここにテキストを入力。">
+			<div><input id="enableCustomStyle" type="checkbox"><label for="style">カスタムCSS</label></div>
+			<textarea id="style" rows="5" cols="18" spellcheck="false">@import url('https://fonts.googleapis.com/css2?family=M+PLUS+U:wght@800&display=swap');
+#main {
+    font-family: "M PLUS U", sans-serif;
+    background: linear-gradient(to right, red, orange, yellow, green, blue, purple, red, orange, yellow, green, blue, purple, red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}</textarea>
 		</div>
 		
 		<div>
@@ -107,6 +137,20 @@
 			});
 			console.log(e.currentTarget.value);
 		})
+		enableCustomStyle.addEventListener("change", (e) => {
+			if (e.currentTarget.checked) {
+				customStyle.innerHTML = style.value;
+			} else {
+				customStyle.innerHTML = ""
+			}
+		})
+		style.addEventListener("input", (e) => {
+			if (enableCustomStyle.checked)
+				customStyle.innerHTML = e.currentTarget.value;
+			console.log(e.currentTarget.value);
+		})
 	</script>
+
+	<style id="customStyle"></style>
 </body>
 </html>
