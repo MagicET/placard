@@ -73,7 +73,7 @@
 	</style>
 </head>
 <body>
-	<div id="main" class="animated">
+	<div id="main">
 		ここにテキストを入力。ここにテキストを入力。
 	</div>
 	<button id="settingsButton" onclick="settings.showModal()">設定</button>
@@ -115,18 +115,40 @@
 				.catch(function() { console.log("Service Worker Not Registered"); });
 		}
 
+		if ((savedDuration = localStorage.getItem("duration"))) {
+			duration.value = savedDuration;
+			main.style.animationDuration = savedDuration + "s";
+		}
 		duration.addEventListener("change", (e) => {
 			main.style.animationDuration = e.currentTarget.value + "s";
+			localStorage.setItem("duration", e.currentTarget.value);
 			console.log(e.currentTarget.value);
 		})
+
+		if ((savedBgcolor = localStorage.getItem("bgcolor"))) {
+			bgcolor.value = savedBgcolor;
+			document.body.style.backgroundColor = savedBgcolor;
+		}
 		bgcolor.addEventListener("change", (e) => {
 			document.body.style.backgroundColor = e.currentTarget.value;
+			localStorage.setItem("bgcolor", e.currentTarget.value);
 			console.log(e.currentTarget.value);
 		})
+
+		if ((savedColor = localStorage.getItem("color"))) {
+			color.value = savedColor;
+			main.style.color = savedColor;
+		}
 		color.addEventListener("change", (e) => {
 			main.style.color = e.currentTarget.value;
+			localStorage.setItem("color", e.currentTarget.value);
 			console.log(e.currentTarget.value);
 		})
+
+		if ((savedText = localStorage.getItem("text"))) {
+			text.value = savedText;
+			main.textContent = savedText + savedText;
+		}
 		text.addEventListener("input", (e) => {
 			main.textContent = e.currentTarget.value + e.currentTarget.value;
 			main.style.animationDuration = "0s";
@@ -135,8 +157,10 @@
 					main.style.animationDuration = duration.value + "s";
 				});
 			});
+			localStorage.setItem("text", e.currentTarget.value);
 			console.log(e.currentTarget.value);
 		})
+
 		enableCustomStyle.addEventListener("change", (e) => {
 			if (e.currentTarget.checked) {
 				customStyle.innerHTML = style.value;
@@ -144,7 +168,12 @@
 				customStyle.innerHTML = ""
 			}
 		})
+
+		if ((savedStyle = localStorage.getItem("style"))) {
+			style.value = savedStyle;
+		}
 		style.addEventListener("input", (e) => {
+			localStorage.setItem("style", e.currentTarget.value);
 			if (enableCustomStyle.checked)
 				customStyle.innerHTML = e.currentTarget.value;
 			console.log(e.currentTarget.value);
